@@ -15,9 +15,19 @@ abstract class TestGuy_Module {
 	protected $storage = array();
     
     protected $config = array();
+
+    protected $requiredFields = array();
     
     public function _setConfig($config) {
         $this->config = $config;
+        $fields = array_keys($this->config);
+        if (array_intersect($fields, $this->requiredFields) != $this->requiredFields)
+            throw new TestGuy_Exception_ModuleConfig("
+                Module not configured\n\n
+                Config options were not set for module ".get_class($this)."\n
+                Options: ".implode(', ', $this->requiredFields)." are required\n
+                Update suites.yml for current test and sit values for this module
+        ");
     }
 
 	// HOOK: on every TestGuy class initialization
