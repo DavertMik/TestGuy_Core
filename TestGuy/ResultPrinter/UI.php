@@ -73,6 +73,10 @@ class TestGuy_ResultPrinter_UI extends PHPUnit_TextUI_ResultPrinter {
 		$trace = array_reverse($failedTest->getTrace());
 		$length = $i = count($trace);
 		$last = array_shift($trace);
+        if (!method_exists($last,'getHumanizedAction')) {
+            $this->output->put("\n ".$defect->getExceptionAsString());
+            return;
+        }
 		$action = $last->getHumanizedAction();
         if (strpos($action, "am")===0) {
             $action = 'become'.substr($action,2);
